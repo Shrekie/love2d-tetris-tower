@@ -2,6 +2,8 @@ player = {}
 player.newPos = 0
 player.restitution = 0
 player.rotateDegrees = 0
+player.dtotal = 0
+player.move = false
 player.currentShape = {}
 
 function player.load()
@@ -10,9 +12,18 @@ end
 
 function player.update(dt)
 
-	if love.keyboard.isDown("d") then --press the right arrow key to push the ball to the right
+	-- incremental movement
+	player.dtotal = player.dtotal + dt
+	if player.dtotal >= 0.08 then
+		player.move = true
+		player.dtotal = player.dtotal - 0.08
+	else
+		player.move	= false
+	end
+
+	if love.keyboard.isDown("d") and player.move == true  then --press the right arrow key to push the ball to the right
 		player.controlMethod("right")
-	elseif love.keyboard.isDown("a") then --press the left arrow key to push the ball to the left
+	elseif love.keyboard.isDown("a") and player.move == true then --press the left arrow key to push the ball to the left
 		player.controlMethod("left")
 	end
 
@@ -21,7 +32,7 @@ end
 function player.controlMethod(command)
 
 	if command == "right" then
-		player.newPos=player.currentShape.body:getX() + 5
+		player.newPos=player.currentShape.body:getX() + (physics.oneMeter/1.91)
 		if player.currentShape.type == "L" then
 			player.currentShape.body:setX(player.newPos)
 			player.currentShape.body2:setX(player.newPos)
@@ -31,7 +42,7 @@ function player.controlMethod(command)
 	end
 
 	if command == "left" then
-		player.newPos=player.currentShape.body:getX() - 5
+		player.newPos=player.currentShape.body:getX() - (physics.oneMeter/1.91)
 		if player.currentShape.type == "L" then
 			player.currentShape.body:setX(player.newPos)
 			player.currentShape.body2:setX(player.newPos)

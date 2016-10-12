@@ -15,9 +15,9 @@ function blockManager.shapeRandomizer()
 		blockManager.newShape.body2:setLinearDamping( 1 )
 		blockManager.newShape.shape2 = love.physics.newRectangleShape(0,0, physics.oneMeter*3,physics.oneMeter)
 		blockManager.newShape.fixture2 = love.physics.newFixture(blockManager.newShape.body2, blockManager.newShape.shape2, 5)
-		blockManager.newShape.fixture2:setFriction(0.5)
+		blockManager.newShape.fixture2:setFriction(1)
 		blockManager.newShape.fixture2:setRestitution(0)
-		blockManager.newShape.fixture2:setDensity(1)
+		blockManager.newShape.fixture2:setDensity(0.6)
 		blockManager.newShape.fixture2:setUserData("User_square "..blockManager.pieces)
 
 		blockManager.newShape.body = love.physics.newBody(physics.world, game.width/2, 0, "dynamic")
@@ -25,12 +25,13 @@ function blockManager.shapeRandomizer()
 		blockManager.newShape.body:setLinearDamping( 1 )
 		blockManager.newShape.shape = love.physics.newRectangleShape(physics.oneMeter*2,physics.oneMeter/2, physics.oneMeter,physics.oneMeter*2)
 		blockManager.newShape.fixture = love.physics.newFixture(blockManager.newShape.body, blockManager.newShape.shape, 5)
-		blockManager.newShape.fixture:setFriction(0.5)
+		blockManager.newShape.fixture:setFriction(1)
 		blockManager.newShape.fixture:setRestitution(0)
-		blockManager.newShape.fixture:setDensity(1)
+		blockManager.newShape.fixture:setDensity(0.6)
 		blockManager.newShape.fixture:setUserData("User_square "..blockManager.pieces)
 
 		blockManager.newShape.joint = love.physics.newWeldJoint( blockManager.newShape.body, blockManager.newShape.body2, 0, 0, false )
+
 	elseif ranPick == 2 then
 
 		-- I horizontal ledge SHAPE
@@ -40,9 +41,9 @@ function blockManager.shapeRandomizer()
 		blockManager.newShape.body:setLinearDamping( 1 )
 		blockManager.newShape.shape = love.physics.newRectangleShape(0,0, physics.oneMeter*4,physics.oneMeter)
 		blockManager.newShape.fixture = love.physics.newFixture(blockManager.newShape.body, blockManager.newShape.shape, 5)
-		blockManager.newShape.fixture:setFriction(0.5)
+		blockManager.newShape.fixture:setFriction(1)
 		blockManager.newShape.fixture:setRestitution(0)
-		blockManager.newShape.fixture:setDensity(1)
+		blockManager.newShape.fixture:setDensity(0.6)
 		blockManager.newShape.fixture:setUserData("User_square "..blockManager.pieces)
 
 	end
@@ -62,7 +63,24 @@ function blockManager.drawDropShadow(shape)
 		else
 			love.graphics.setLineWidth(physics.oneMeter)
 		end
+
 		love.graphics.line(firstBodyPoints[1],firstBodyPoints[2],firstBodyPoints[1],game.height)
+
+	end
+
+	if shape.type == "L" then
+
+		if (player.rotateDegrees == 0) then
+			love.graphics.setLineWidth(physics.oneMeter*4)
+			love.graphics.line(((firstBodyPoints[1]-physics.oneMeter*2)+physics.oneMeter/2),firstBodyPoints[2],((firstBodyPoints[1]-physics.oneMeter*2)+physics.oneMeter/2),game.height)
+		elseif player.rotateDegrees == 180 then
+			love.graphics.setLineWidth(physics.oneMeter*4)
+			love.graphics.line(((firstBodyPoints[1]+physics.oneMeter*2)-physics.oneMeter/2),firstBodyPoints[2],((firstBodyPoints[1]+physics.oneMeter*2)-physics.oneMeter/2),game.height)
+		else
+			love.graphics.setLineWidth(physics.oneMeter*2)
+			love.graphics.line(firstBodyPoints[1],firstBodyPoints[2],firstBodyPoints[1],game.height)
+		end
+		
 
 	end
 

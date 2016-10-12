@@ -15,11 +15,11 @@ end
 function physics.beginContact(a, b, coll)
     x,y = coll:getNormal()
     if a:getUserData() == physics.collision.currentpiece then
-        --a:setRestitution(0)
+        a:setRestitution(0)
         --a:getBody():setAngularVelocity(0)
         --a:getBody():setLinearVelocity( 0, 0 )
     elseif b:getUserData() == physics.collision.currentpiece then
-        --b:setRestitution(0)
+        b:setRestitution(0)
         --b:getBody():setAngularVelocity(0)
         --b:getBody():setLinearVelocity( 0, 0 )
     end
@@ -41,13 +41,13 @@ function physics.preSolve(a, b, coll)
 
     if a:getUserData() == physics.collision.currentpiece then
     	physics.collision.newContact = true
-        a:setRestitution(0)
+        --a:setRestitution(0)
         --a:getBody():setAngularVelocity(0)
         --a:getBody():setLinearVelocity( 0, 0 )
     	physics.collision.text = physics.collision.text.."\n"..a:getUserData()
     elseif b:getUserData() == physics.collision.currentpiece then
     	physics.collision.newContact = true
-        b:setRestitution(0)
+        --b:setRestitution(0)
         --b:getBody():setAngularVelocity(0)
         --b:getBody():setLinearVelocity( 0, 0 )
     	physics.collision.text = physics.collision.text.."\n"..b:getUserData()
