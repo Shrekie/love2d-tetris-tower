@@ -36,7 +36,7 @@ function player.controlMethod(command)
 		if player.currentShape.type == "L" then
 			player.currentShape.body:setX(player.newPos)
 			player.currentShape.body2:setX(player.newPos)
-		elseif player.currentShape.type == "I" then
+		elseif player.currentShape.type == "I" or player.currentShape.type == "D" then
 			player.currentShape.body:setX(player.newPos)
 		end
 	end
@@ -46,7 +46,7 @@ function player.controlMethod(command)
 		if player.currentShape.type == "L" then
 			player.currentShape.body:setX(player.newPos)
 			player.currentShape.body2:setX(player.newPos)
-		elseif player.currentShape.type == "I" then
+		elseif player.currentShape.type == "I" or player.currentShape.type == "D" then
 			player.currentShape.body:setX(player.newPos)
 		end
 	end
@@ -80,4 +80,5 @@ function player.newPiece(currentShape)
 	player.currentShape = currentShape
 	player.currentShape.playerActive = true
 	player.rotateDegrees = 0
+	game.zoomAmount = 0
 end
