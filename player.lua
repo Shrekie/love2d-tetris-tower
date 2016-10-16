@@ -22,9 +22,13 @@ function player.update(dt)
 	end
 
 	if love.keyboard.isDown("d") and player.move == true  then --press the right arrow key to push the ball to the right
+
 		player.controlMethod("right")
+
 	elseif love.keyboard.isDown("a") and player.move == true then --press the left arrow key to push the ball to the left
+
 		player.controlMethod("left")
+
 	end
 
 end
@@ -33,7 +37,7 @@ function player.controlMethod(command)
 
 	if command == "right" then
 		player.newPos=player.currentShape.body:getX() + (physics.oneMeter/1.91)
-		if player.currentShape.type == "L" then
+		if player.currentShape.type == "L" or player.currentShape.type == "Z" then
 			player.currentShape.body:setX(player.newPos)
 			player.currentShape.body2:setX(player.newPos)
 		elseif player.currentShape.type == "I" or player.currentShape.type == "D" then
@@ -43,7 +47,7 @@ function player.controlMethod(command)
 
 	if command == "left" then
 		player.newPos=player.currentShape.body:getX() - (physics.oneMeter/1.91)
-		if player.currentShape.type == "L" then
+		if player.currentShape.type == "L" or player.currentShape.type == "Z" then
 			player.currentShape.body:setX(player.newPos)
 			player.currentShape.body2:setX(player.newPos)
 		elseif player.currentShape.type == "I" or player.currentShape.type == "D" then
@@ -52,7 +56,7 @@ function player.controlMethod(command)
 	end
 
 	if command == "rotate" then
-		if player.currentShape.type == "L" then
+		if player.currentShape.type == "L" or player.currentShape.type == "Z" then
 			player.currentShape.body:setAngle(math.rad(player.rotateDegrees))
 			player.currentShape.body2:setAngle(math.rad(player.rotateDegrees))
 		end
@@ -80,5 +84,4 @@ function player.newPiece(currentShape)
 	player.currentShape = currentShape
 	player.currentShape.playerActive = true
 	player.rotateDegrees = 0
-	game.zoomAmount = 0
 end
