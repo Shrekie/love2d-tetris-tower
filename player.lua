@@ -20,7 +20,6 @@ function player.update(dt)
 	else
 		player.move	= false
 	end
-
 	if love.keyboard.isDown("d") and player.move == true  then --press the right arrow key to push the ball to the right
 
 		player.controlMethod("right")
@@ -29,6 +28,31 @@ function player.update(dt)
 
 		player.controlMethod("left")
 
+	end
+	
+end
+function love.keypressed( key, scancode, isrepeat )
+
+	-- super movement, maybe remove
+
+	if scancode == "e" and isrepeat == false then
+		player.newPos=player.currentShape.body:getX() + (physics.oneMeter*2/1.91)
+		if player.currentShape.type == "L" or player.currentShape.type == "Z" then
+			player.currentShape.body:setX(player.newPos)
+			player.currentShape.body2:setX(player.newPos)
+		elseif player.currentShape.type == "I" or player.currentShape.type == "D" then
+			player.currentShape.body:setX(player.newPos)
+		end
+	end
+
+	if scancode == "q" and isrepeat == false then
+		player.newPos=player.currentShape.body:getX() - (physics.oneMeter*2/1.91)
+		if player.currentShape.type == "L" or player.currentShape.type == "Z" then
+			player.currentShape.body:setX(player.newPos)
+			player.currentShape.body2:setX(player.newPos)
+		elseif player.currentShape.type == "I" or player.currentShape.type == "D" then
+			player.currentShape.body:setX(player.newPos)
+		end
 	end
 
 end
@@ -84,4 +108,5 @@ function player.newPiece(currentShape)
 	player.currentShape = currentShape
 	player.currentShape.playerActive = true
 	player.rotateDegrees = 0
+	game.topspawn = game.topspawn - 10
 end

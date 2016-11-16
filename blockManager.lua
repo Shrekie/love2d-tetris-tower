@@ -2,6 +2,7 @@ blockManager = {}
 blockManager.oldPieces = {}
 blockManager.pieces = 0 -- amount of pieces on board
 blockManager.pieceStructures = 3
+blockManager.topspawnSpace = physics.oneMeter*10
 
 function blockManager.shapeRandomizer()
 
@@ -20,7 +21,7 @@ function blockManager.shapeRandomizer()
 
 		-- L SHAPE
 		blockManager.newShape.type = "L"
-		blockManager.newShape.body2 = love.physics.newBody(physics.world, game.width/2, 0, "dynamic")
+		blockManager.newShape.body2 = love.physics.newBody(physics.world, game.width/2, game.topspawn, "dynamic")
 		blockManager.newShape.body2:setAngularDamping( 1 )
 		blockManager.newShape.body2:setLinearDamping( 1 )
 		blockManager.newShape.shape2 = love.physics.newRectangleShape(0,0, physics.oneMeter*3,physics.oneMeter)
@@ -30,7 +31,7 @@ function blockManager.shapeRandomizer()
 		blockManager.newShape.fixture2:setDensity(0.4)
 		blockManager.newShape.fixture2:setUserData("User_square "..blockManager.pieces)
 
-		blockManager.newShape.body = love.physics.newBody(physics.world, game.width/2, 0, "dynamic")
+		blockManager.newShape.body = love.physics.newBody(physics.world, game.width/2, game.topspawn, "dynamic")
 		blockManager.newShape.body:setAngularDamping( 1 )
 		blockManager.newShape.body:setLinearDamping( 1 )
 		blockManager.newShape.shape = love.physics.newRectangleShape(physics.oneMeter*2,physics.oneMeter/2, physics.oneMeter,physics.oneMeter*2)
@@ -46,7 +47,7 @@ function blockManager.shapeRandomizer()
 
 		-- I horizontal ledge SHAPE
 		blockManager.newShape.type = "I"
-		blockManager.newShape.body = love.physics.newBody(physics.world, game.width/2, 0, "dynamic")
+		blockManager.newShape.body = love.physics.newBody(physics.world, game.width/2, game.topspawn, "dynamic")
 		blockManager.newShape.body:setAngularDamping( 1 )
 		blockManager.newShape.body:setLinearDamping( 1 )
 		blockManager.newShape.shape = love.physics.newRectangleShape(0,0, physics.oneMeter*4,physics.oneMeter)
@@ -61,7 +62,7 @@ function blockManager.shapeRandomizer()
 		-- I horizontal ledge SHAPE
 		blockManager.newShape.type = "D"
 
-		blockManager.newShape.body = love.physics.newBody(physics.world, game.width/2, 0, "dynamic")
+		blockManager.newShape.body = love.physics.newBody(physics.world, game.width/2, game.topspawn, "dynamic")
 		blockManager.newShape.body:setAngularDamping( 1 )
 		blockManager.newShape.body:setLinearDamping( 1 )
 		blockManager.newShape.shape = love.physics.newRectangleShape(0,0, physics.oneMeter*2,physics.oneMeter*2)
@@ -78,7 +79,7 @@ function blockManager.shapeRandomizer()
 		-- I horizontal ledge SHAPE
 		blockManager.newShape.type = "Z"
 
-		blockManager.newShape.body = love.physics.newBody(physics.world, game.width/2, 0, "dynamic")
+		blockManager.newShape.body = love.physics.newBody(physics.world, game.width/2, game.topspawn, "dynamic")
 		blockManager.newShape.body:setAngularDamping( 1 )
 		blockManager.newShape.body:setLinearDamping( 1 )
 		blockManager.newShape.shape = love.physics.newRectangleShape(0,0, physics.oneMeter*2,physics.oneMeter)
@@ -88,7 +89,7 @@ function blockManager.shapeRandomizer()
 		blockManager.newShape.fixture:setDensity(0.4)
 		blockManager.newShape.fixture:setUserData("User_square "..blockManager.pieces)
 
-		blockManager.newShape.body2 = love.physics.newBody(physics.world, game.width/2, 0, "dynamic")
+		blockManager.newShape.body2 = love.physics.newBody(physics.world, game.width/2, game.topspawn, "dynamic")
 		blockManager.newShape.body2:setAngularDamping( 1 )
 		blockManager.newShape.body2:setLinearDamping( 1 )
 		blockManager.newShape.shape2 = love.physics.newRectangleShape(physics.oneMeter,physics.oneMeter, physics.oneMeter*2,physics.oneMeter)
@@ -122,7 +123,7 @@ function blockManager.drawDropShadow(shape)
 			love.graphics.line(firstBodyPoints[1]+(physics.oneMeter/2),firstBodyPoints[2],firstBodyPoints[1]+(physics.oneMeter/2),game.height)
 		elseif player.rotateDegrees == 180 then
 			love.graphics.setLineWidth(physics.oneMeter*3+2)
-			love.graphics.line(firstBodyPoints[1]-(physics.oneMeter/2),firstBodyPoints[2]-physics.oneMeter,firstBodyPoints[1]-(physics.oneMeter/2),game.height-physics.oneMeter)
+			love.graphics.line(firstBodyPoints[1]-(physics.oneMeter/2),firstBodyPoints[2]-physics.oneMeter,firstBodyPoints[1]-(physics.oneMeter/2),game.height)
 
 		elseif player.rotateDegrees == 90 then
 			love.graphics.setLineWidth(physics.oneMeter*2+2)
@@ -196,12 +197,39 @@ function blockManager.update()
 		blockManager.generatePiece()
 	end
 
+	blockManager.checkTopHeight()
+	blockManager.checkDestroy()
+
 end
 
 function blockManager.drawNonPlayerPieces()
 	love.graphics.setColor(193, 47, 14)
 	for i,v in ipairs(blockManager.oldPieces) do
 		blockManager.drawBodies(v)
+	end
+end
+
+function blockManager.checkDestroy()
+	for i,v in ipairs(blockManager.oldPieces) do
+		if v.body:getY() > (game.height + 30) then
+			if v.playerActive == true then
+				blockManager.generatePiece()
+			end
+		table.remove(blockManager.oldPieces, i)
+		end
+	end
+end
+
+function blockManager.checkTopHeight()
+	-- Renews game.topspawn to highest piece height
+	for i,v in ipairs(blockManager.oldPieces) do
+
+		if v.body:getY() < (game.highest + blockManager.topspawnSpace) then
+			game.highest = v.body:getY()
+			game.topspawn = (game.highest - blockManager.topspawnSpace)
+			love.graphics.translate(0,game.topspawn)
+		end
+		
 	end
 end
 
