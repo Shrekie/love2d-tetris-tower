@@ -123,7 +123,7 @@ function blockManager.drawDropShadow(shape)
 			love.graphics.line(firstBodyPoints[1]+(physics.oneMeter/2),firstBodyPoints[2],firstBodyPoints[1]+(physics.oneMeter/2),game.height)
 		elseif player.rotateDegrees == 180 then
 			love.graphics.setLineWidth(physics.oneMeter*3+2)
-			love.graphics.line(firstBodyPoints[1]-(physics.oneMeter/2),firstBodyPoints[2]-physics.oneMeter,firstBodyPoints[1]-(physics.oneMeter/2),game.height)
+			love.graphics.line(firstBodyPoints[1]-(physics.oneMeter/2),firstBodyPoints[2],firstBodyPoints[1]-(physics.oneMeter/2),game.height)
 
 		elseif player.rotateDegrees == 90 then
 			love.graphics.setLineWidth(physics.oneMeter*2+2)
